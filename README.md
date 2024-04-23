@@ -15,4 +15,4 @@ This is a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hy
 
 Calling `repo-transient` anywhere form within the repo:
 
-~[](./img/example-1.png)
+![](./img/example-1.png)
