@@ -18,6 +18,23 @@ Calling `repo-transient` anywhere from within the repo:
 
 ![](./img/example-1.png)
 
+### Clojure Specific Example
+You need to be a bit more verbose to use it to run interactive CIDER commands while working on a Clojure project:
+```elisp
+(repo-transient-define
+ "my-clj-repo"
+ [["REPL"
+   ("c" "Connect REPL" (lambda () (interactive) (cider-connect-clj '(:host "localhost" :port 63000))) :transient nil)
+   ("d" "Sync deps" (lambda () (interactive) (cider-interactive-eval "(sync-deps)")))]
+  ["Debug"
+   ("p" "Start portal" (lambda () (interactive) (cider-interactive-eval "(user/portal)")))
+   ("P" "Clear portal" (lambda () (interactive) (cider-interactive-eval "(user/portal-clear)")))
+   ("S" "Require snitch" (lambda () (interactive) (cider-interactive-eval "(require '[snitch.core :refer [defn* defmethod* *fn *let]])")))]
+  ["Systems"
+   ("a" "(Re)start main system" (lambda () (interactive) (cider-interactive-eval "(user/restart-sync)")))
+   ("A" "Stop main system" (lambda () (interactive) (cider-interactive-eval "(user/restart-sync)")))]])
+ ```
+
 ## Installing
 Using use-package and elpaca:
 ```elisp
