@@ -14,6 +14,6 @@ To define a repo-specific transient use `repo-transient-define` with repository 
    ("o" "Decrease font" text-scale-decrease :transient nil)]])
  ```
 
-Calling `repo-transient` anywhere form within the repo:
+Calling `repo-transient` anywhere from within the repo:
 
 ![](./img/example-1.png)
