@@ -19,7 +19,7 @@ Calling `repo-transient` anywhere from within the repo:
 ![](./img/example-1.png)
 
 ## Installing
-Using use-package and elpacs:
+Using use-package and elpaca:
 ```elisp
 (use-package repo-transient
   :elpaca (:type git :host github :repo "licht1stein/repo-transient.el")
