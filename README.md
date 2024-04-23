@@ -17,3 +17,13 @@ To define a repo-specific transient use `repo-transient-define` with repository 
 Calling `repo-transient` anywhere from within the repo:
 
 ![](./img/example-1.png)
+
+## Installing
+Using use-package and elpacs:
+```elisp
+(use-package repo-transient
+  :elpaca (:type git :host github :repo "licht1stein/repo-transient.el")
+  :defer nil
+  :bind ("<f6>" . repo-transient))
+```
+I recommend binding `repo-transient` to something easily accessible, F6 in the example above.
