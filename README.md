@@ -1,7 +1,7 @@
 # repo-transient.el
 Easily create repo-specific transient menus for Emacs.
 
-This is a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hydra.el) library. If you have Emacs 29.1 or later transient is built-in, so there are not external dependencies.
+This is a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hydra.el) library. If you have Emacs 29.1 or later transient is built-in, so there are no external dependencies.
 
 ## Example
 To define a repo-specific transient use `repo-transient-define` with repository name as the first argument, and the transient menu as the second argument:
