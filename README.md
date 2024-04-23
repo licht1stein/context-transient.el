@@ -12,3 +12,7 @@ This is a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hy
    ("i" "Increase font" text-scale-increase :transient nil)
    ("o" "Decrease font" text-scale-decrease :transient nil)]])
  ```
+
+Calling `repo-transient` anywhere form within the repo:
+
+~[](./img/example-1.png)
