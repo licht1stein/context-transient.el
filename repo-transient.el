@@ -53,10 +53,9 @@ MENU-ENTRIES - `transient-define-prefix' args"
   (let* ((tr-cmd-name (read (concat "repo-transient-" (downcase repo-name))))
          (docstring (format "Repo transient for %s" repo-name)))
     (puthash repo-name tr-cmd-name repo-transient--transients-map)
-	  `(progn
-	     (transient-define-prefix ,tr-cmd-name ()
-		     ,docstring
-		     ,@menu-entries))))
+	  `(transient-define-prefix ,tr-cmd-name ()
+		   ,docstring
+		   ,@menu-entries)))
 
 ;;;###autoload
 (defun repo-transient ()
