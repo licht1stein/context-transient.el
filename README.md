@@ -34,6 +34,7 @@ You need to be a bit more verbose to use it to run interactive CIDER commands wh
    ("a" "(Re)start main system" (lambda () (interactive) (cider-interactive-eval "(user/restart-sync)")))
    ("A" "Stop main system" (lambda () (interactive) (cider-interactive-eval "(user/restart-sync)")))]])
  ```
+![](./img/example-2.png)
 
 ## Installing
 Using use-package and elpaca:
