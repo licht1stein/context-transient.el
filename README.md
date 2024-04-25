@@ -15,11 +15,14 @@ Using use-package and elpaca:
 I recommend binding `context-transient` to something easily accessible, F6 in the example above.
 
 ## Defining context transients
-Context transients are defined using `context-transient-define`. You can specify either `:context`, `:buffer`, `:repo` or `:project`  keys to check the context. 
+Context transients are defined using `context-transient-define`. You can specify one of the following keys to check current context:
+
 - `:repo` - checks if the current git repo name is equal to this
 - `:project` - checks if the current project name is equal to this (note, this is built-in project.el, not projectile)
 - `:buffer` - checks if the current buffer name is equal to this
+- `:mode`- checks if the current major mode is this
 - `:context` - arbitrary code that will be run to check if the transient should be run
+
 
 Obviously, it's quite possible to define several transients that would apply to the current context. In this case user will be prompted to choose which one to run.
 
@@ -49,6 +52,18 @@ The following example runs the transient if current buffer name is `*scratch*`:
 
 ### Project context (`:project`)
 This will check if the built-in project.el project name is equal to this. Same as `:buffer` or `:repo` — just pass a project name as a string.
+
+### Major mode context (`:mode`)
+Checks if the current major-mode is this. Note, you need to provided the major mode as a quoted symbol, and not as a string:
+```elisp
+(context-transient-define
+ dired-transient
+ :doc "My Dired Transient"
+ :mode 'dired-mode
+ :menu
+ [["Dired"
+   ("d" "Dired mode" (lambda () (interactive) (message "This is dired!")))]])
+```
 
 ### Any expression context (`:context`)
 You can run any lisp expression in `:context`. For example, transient only works on Thursdays:

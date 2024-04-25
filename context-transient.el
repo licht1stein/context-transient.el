@@ -90,13 +90,16 @@ If more than one contexts apply, prompts to select which one to run."
      ((equal 1 (length transients)) (funcall (car transients)))
      (t (funcall (intern (completing-read "More than one context transients found:" transients)))))))
 
-(cl-defun context-transient--check-conditions (&key repo buffer context project)
+(cl-defun context-transient--check-conditions (&key repo buffer context project mode)
   "Check if any of the REPO, BUFFER or CONTEXT conditions are true."
   (or
    (and repo (context-transient--check-repo repo))
    (and buffer (context-transient--check-buffer buffer))
    (and context (macroexp-progn (list context)))
-   (and project (equal project (project-name (project-current))))))
+   (and project (equal project (project-name (project-current))))
+   (and mode (equal mode major-mode))))
+
+(context-transient--check-conditions :mode 'emacs-lisp-mode)
 
 (defun context-transient--symbol-concat (prefix name)
   "Concat PREFIX string with symbol NAME and return resulting symbol."
@@ -104,11 +107,11 @@ If more than one contexts apply, prompts to select which one to run."
 
 ;;@FIX: Don't eval NAME arg twice.
 ;;@MAYBE: Don't require keyword arg for menu definition.
-(cl-defmacro context-transient-define (name &key doc menu context repo buffer project)
+(cl-defmacro context-transient-define (name &key doc menu context repo buffer project mode)
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT.
 
 The resulting transient will be called `context-transient/NAME'"
-  (let ((count (length (remove nil (list context repo buffer project))))
+  (let ((count (length (remove nil (list context repo buffer project mode))))
         (docstring (concat "Automatically generated function to check if `context-transient' conditions are currently met for " (symbol-name name)))
         (fn-name (context-transient--symbol-concat "context-transient-check/" name))
         (transient-name (context-transient--symbol-concat "context-transient/" name)))
@@ -125,7 +128,8 @@ The resulting transient will be called `context-transient/NAME'"
              :repo ,repo
              :buffer ,buffer
              :context ,context
-             :project ,project)
+             :project ,project
+             :mode ,mode)
           ',transient-name))
        (unless (memq ',fn-name context-transient-hook)
         (add-hook 'context-transient-hook (function ,fn-name))))))
