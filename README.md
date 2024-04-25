@@ -34,7 +34,7 @@ The following example runs the transient if current buffer name is `*scratch*`:
 ```
 
 ### Any expression context
-This context transient only works on Thursdays:
+You can run any lisp expression in `:context`. For example, transient only works on Thursdays:
 
 ```elisp
 (context-transient-define thursdays-transient
