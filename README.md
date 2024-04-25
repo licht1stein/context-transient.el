@@ -1,6 +1,9 @@
 # context-transient.el
 Easily create context-specific transient menus for Emacs. Context can be anything — buffer name, current git repo, current project etc. See examples.
 
+## Example
+![](./img/example-2.png)
+
 ## Usage
 Once you have defined your context-specific transients, call them with `M-x context-transient RET`.
 
@@ -22,7 +25,6 @@ Context transients are defined using `context-transient-define`. You can specify
 - `:buffer` - checks if the current buffer name is equal to this
 - `:mode`- checks if the current major mode is this
 - `:context` - arbitrary code that will be run to check if the transient should be run
-
 
 Obviously, it's quite possible to define several transients that would apply to the current context. In this case user will be prompted to choose which one to run.
 
