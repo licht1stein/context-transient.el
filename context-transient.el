@@ -9,7 +9,7 @@
 ;;
 ;; Created: 23 Apr 2024
 ;;
-;; URL: https://github.com/licht1stein
+;; URL: https://github.com/licht1stein/context-transient.el
 ;;
 ;; License: GPLv3
 ;;
