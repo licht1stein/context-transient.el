@@ -72,16 +72,17 @@ Functions are run in order until the first non-nil result is returned."
 (cl-defmacro context-transient-define (name &key doc context menu repo buffer)
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT."
   (declare (indent 1))
-  (message "Context: %s\n\nBuffer: %s\n\nContext: %s" repo buffer context)
-  (if (and (not context) (not repo) (not buffer))
-      (user-error "Need to define either :repo, :buffer or :context")
-    `(progn (transient-define-prefix ,name () ,doc ,menu)
-      (add-hook 'context-transient-hook
-       (lambda ()
-         (cond
-          (,(macroexp-progn (list context)) ',name)
-          (,(context-transient--check-buffer buffer) ',name)
-          (,(context-transient--check-repo repo) ',name)))))))
+  (let ((count (length (remove nil (list context repo buffer)))))
+    ;; Check if the count is not exactly one
+    (when (/= count 1)
+      (user-error "Exactly one of :context, :repo, or :buffer must be provided")))
+  `(progn (transient-define-prefix ,name () ,doc ,menu)
+    (add-hook 'context-transient-hook
+     (lambda ()
+       (cond
+        (,(macroexp-progn (list context)) ',name)
+        (,(context-transient--check-buffer buffer) ',name)
+        (,(context-transient--check-repo repo) ',name))))))
 
 ;; (context-transient-define context-transient-repo
 ;;   :doc "Repo specific transient"
