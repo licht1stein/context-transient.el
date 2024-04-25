@@ -1,7 +1,8 @@
 # context-transient.el
 Easily create context-specific transient menus for Emacs. Context can be anything — buffer name, current git repo, current project etc. See examples.
 
-This is a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hydra.el) library. If you have Emacs 29.1 or later transient is built-in, so there are no external dependencies.
+## Usage
+Once you have defined your context-specific transients, call them with `M-x context-transient RET`.
 
 ## Examples
 Context transients are defined using `context-transient-define`. You can specify either `:context`, `:buffer` or `:repo` keys to check the context. 
@@ -77,3 +78,6 @@ Using use-package and elpaca:
   :bind ("<f6>" . context-transient))
 ```
 I recommend binding `context-transient` to something easily accessible, F6 in the example above.
+
+## Thanks
+This library started as a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hydra.el) library. If you have Emacs 29.1 or later transient is built-in, so there are no external dependencies. But thanks to the help from @progfolio it became a much more useful tool.
