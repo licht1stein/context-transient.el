@@ -89,19 +89,22 @@ Functions are run in order until the first non-nil result is returned."
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT.
 
 The resulting transient will be called `context-transient/NAME'"
-  (declare (indent 1))
   (let ((count (length (remove nil (list context repo buffer))))
-        (fn-name (context-transient--generate-function-name name)))
+        (fn-name (context-transient--generate-function-name name))
+        (transient-name (intern (concat "context-transient-menu/" (symbol-name name)))))
     ;; Check if the count is not exactly one
     (when (/= count 1)
       (user-error "Exactly one of :context, :repo, or :buffer must be provided"))
+    (declare (indent 1))
     `(progn
-       (transient-define-prefix ,fn-name () ,doc ,menu)
-       (add-hook 'context-transient-hook
-        (lambda ()
-          (when
-              (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
-            ',fn-name))))))
+       (transient-define-prefix ,transient-name () ,doc ,menu)
+       (defun ,fn-name nil
+        "Automatically generated function to check if `context-transient' conditions are currently met."
+        (when
+            (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
+          ',transient-name))
+       (unless (memq ',fn-name context-transient-hook)
+        (add-hook 'context-transient-hook (function ,fn-name))))))
 
 ;; (context-transient-define context-transient-repo
 ;;   :doc "Repo specific transient"
