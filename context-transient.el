@@ -79,9 +79,9 @@ Functions are run in order until the first non-nil result is returned."
    (and buffer (context-transient--check-buffer buffer))
    (and context (macroexp-progn (list context)))))
 
-(defun context-transient--generate-function-name (name)
-  "Generate standardized menu function names using NAME and prefix."
-  (intern (concat "context-transient/" (symbol-name name))))
+(defun context-transient--symbol-concat (prefix name)
+  "Concat PREFIX string with symbol NAME and return resulting symbol."
+  (intern (concat prefix (symbol-name name))))
 
 ;;@FIX: Don't eval NAME arg twice.
 ;;@MAYBE: Don't require keyword arg for menu definition.
@@ -90,8 +90,9 @@ Functions are run in order until the first non-nil result is returned."
 
 The resulting transient will be called `context-transient/NAME'"
   (let ((count (length (remove nil (list context repo buffer))))
-        (fn-name (context-transient--generate-function-name name))
-        (transient-name (intern (concat "context-transient-menu/" (symbol-name name)))))
+        (docstring (concat "Automatically generated function to check if `context-transient' conditions are currently met for " (symbol-name name)))
+        (fn-name (context-transient--symbol-concat "context-transient-check/" name))
+        (transient-name (context-transient--symbol-concat "context-transient/" name)))
     ;; Check if the count is not exactly one
     (when (/= count 1)
       (user-error "Exactly one of :context, :repo, or :buffer must be provided"))
@@ -99,7 +100,7 @@ The resulting transient will be called `context-transient/NAME'"
     `(progn
        (transient-define-prefix ,transient-name () ,doc ,menu)
        (defun ,fn-name nil
-        "Automatically generated function to check if `context-transient' conditions are currently met."
+        ,docstring
         (when
             (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
           ',transient-name))
