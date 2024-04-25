@@ -44,11 +44,17 @@ or a symbol naming a `context-transient' menu.
 Functions are run in order until the first non-nil result is returned."
   :type 'hook)
 
-(defun context-transient-repo (repo-name)
-  "Return current repository root foler name as a string."
-  (let* ((repo-dir (locate-dominating-file "." ".git")))
-    (when-let* ((repo-dir (car (last (butlast (file-name-split repo-dir))))))
-      (equal repo-dir repo-name))))
+(defun context-transient--check-repo (repo-name)
+  "Check if current repo name is REPO-NAME."
+  (when repo-name
+    (let* ((repo-dir (locate-dominating-file "." ".git")))
+      (when-let* ((repo-dir (car (last (butlast (file-name-split repo-dir))))))
+        (equal repo-dir repo-name)))))
+
+(defun context-transient--check-buffer (buff)
+  "Check if current buffer name is BUFF."
+  (when buff
+    (equal (buffer-name) buff)))
 
 ;;@FIX: ensure returned transient is, in fact, a transient before running
 (defun context-transient ()
@@ -63,17 +69,25 @@ Functions are run in order until the first non-nil result is returned."
 ;;@FIX: Use named functions for hook.
 ;;@MAYBE: Namespace defined menus.
 ;;@MAYBE: Don't require keyword arg for menu definition.
-(cl-defmacro context-transient-define (name &key doc context menu)
+(cl-defmacro context-transient-define (name &key doc context menu repo buffer)
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT."
   (declare (indent 1))
-  `(progn (transient-define-prefix ,name () ,doc ,menu)
-    (add-hook 'context-transient-hook (lambda () (when ,(macroexp-progn (list context)) ',name)))))
+  (message "Context: %s\n\nBuffer: %s\n\nContext: %s" repo buffer context)
+  (if (and (not context) (not repo) (not buffer))
+      (user-error "Need to define either :repo, :buffer or :context")
+    `(progn (transient-define-prefix ,name () ,doc ,menu)
+      (add-hook 'context-transient-hook
+       (lambda ()
+         (cond
+          (,(macroexp-progn (list context)) ',name)
+          (,(context-transient--check-buffer buffer) ',name)
+          (,(context-transient--check-repo repo) ',name)))))))
 
 ;; (context-transient-define context-transient-repo
 ;;   :doc "Repo specific transient"
-;;   :context (context-transient-repo "context-transient.el")
+;;   :repo "*scratch*"
 ;;   :menu
-;;   [["Test" ("r" "This is repo context" (lambda () (interactive) (message "Repo context!")))]])
+;;   [["Test" ("b" "This is repo context" (lambda () (interactive) (message "Repo context!")))]])
 
 (provide 'repo-transient)
 ;;; repo-transient.el ends here
