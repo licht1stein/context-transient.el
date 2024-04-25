@@ -63,14 +63,31 @@ Functions are run in order until the first non-nil result is returned."
   (when buff
     (equal (buffer-name) buff)))
 
+(defun context-transient--run-hook-collect-results (hook &rest args)
+  "Run all functions in HOOK and collect non-nil results.
+ARGS are passed to each hook function."
+  (let ((results '()))
+    ;; Loop through all functions in the hook
+    (dolist (func (symbol-value hook))
+      (let ((result (apply func args)))
+        ;; Collect results that are not nil
+        (when result
+          (push result results))))
+    ;; Return the collected results
+    (nreverse results)))  ; Return results in the order they were added
+
 ;;@FIX: ensure returned transient is, in fact, a transient before running
 ;;;###autoload
 (defun context-transient ()
-  "Run `context-transient-hook' until success."
+  "Run context transient for the current context.
+
+If more than one contexts apply, prompts to select which one to run."
   (interactive)
-  (if-let ((transient (run-hook-with-args-until-success 'context-transient-hook)))
-      (funcall transient)
-    (user-error "No transient found for current context")))
+  (let ((transients (context-transient--run-hook-collect-results 'context-transient-hook)))
+    (cond
+     ((not transients) (user-error "No transient found for current context"))
+     ((equal 1 (length transients)) (funcall (car transients)))
+     (t (funcall (intern (completing-read "More than one context transients found:" transients)))))))
 
 (cl-defun context-transient--check-conditions (&key repo buffer context)
   "Check if any of the REPO, BUFFER or CONTEXT conditions are true."

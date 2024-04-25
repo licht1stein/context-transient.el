@@ -14,11 +14,13 @@ Using use-package and elpaca:
 ```
 I recommend binding `context-transient` to something easily accessible, F6 in the example above.
 
-## Examples
+## Defining context transients
 Context transients are defined using `context-transient-define`. You can specify either `:context`, `:buffer` or `:repo` keys to check the context. 
 - `:repo` - checks if the current git repo name is equal to this
 - `:buffer` - checks if the current buffer name is equal to this
 - `:context` - arbitrary code that will be run to check if the transient should be run
+
+Obviously, it's quite possible to define several transients that would apply to the current context. In this case user will be prompted to choose which one to run.
 
 ### Git repo context
 This example defines a transient menu for git repos. Note the usage of `:repo` function — this is a helper function that returns `t` if the repo name is equal to it's argument. But context accepts any expression that evaluates to `t` or `nil`.
