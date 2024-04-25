@@ -15,8 +15,9 @@ Using use-package and elpaca:
 I recommend binding `context-transient` to something easily accessible, F6 in the example above.
 
 ## Defining context transients
-Context transients are defined using `context-transient-define`. You can specify either `:context`, `:buffer` or `:repo` keys to check the context. 
+Context transients are defined using `context-transient-define`. You can specify either `:context`, `:buffer`, `:repo` or `:project`  keys to check the context. 
 - `:repo` - checks if the current git repo name is equal to this
+- `:project` - checks if the current project name is equal to this (note, this is built-in project.el, not projectile)
 - `:buffer` - checks if the current buffer name is equal to this
 - `:context` - arbitrary code that will be run to check if the transient should be run
 
@@ -45,6 +46,9 @@ The following example runs the transient if current buffer name is `*scratch*`:
   :menu
   [["Test" ("i" "Itch *scratch*" (lambda () (interactive) (message "Itched")))]])
 ```
+
+### Project context (`:context`)
+This will check if the built-in project.el project name is equal to this. Same as `:buffer` or `:repo` — just pass a project name as a string.
 
 ### Any expression context (`:context`)
 You can run any lisp expression in `:context`. For example, transient only works on Thursdays:

@@ -1,4 +1,4 @@
-;;; repo-transient.el --- Git specific transients -*- lexical-binding: t; -*-
+;;; context-transient.el --- Context specific transients -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024, Mykhaylo Bilyanskyy <mb@m1k.pw>
 ;;
@@ -30,7 +30,8 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; Commentary:
-;; Easily define and call repo-specific transient menus.
+;; Easily define and call context-specific transient menus for current
+;; project, git repo, buffer or any other condition.
 ;;; Code:
 (require 'transient)
 
@@ -89,12 +90,13 @@ If more than one contexts apply, prompts to select which one to run."
      ((equal 1 (length transients)) (funcall (car transients)))
      (t (funcall (intern (completing-read "More than one context transients found:" transients)))))))
 
-(cl-defun context-transient--check-conditions (&key repo buffer context)
+(cl-defun context-transient--check-conditions (&key repo buffer context project)
   "Check if any of the REPO, BUFFER or CONTEXT conditions are true."
   (or
    (and repo (context-transient--check-repo repo))
    (and buffer (context-transient--check-buffer buffer))
-   (and context (macroexp-progn (list context)))))
+   (and context (macroexp-progn (list context)))
+   (and project (equal project (project-name (project-current))))))
 
 (defun context-transient--symbol-concat (prefix name)
   "Concat PREFIX string with symbol NAME and return resulting symbol."
@@ -102,33 +104,37 @@ If more than one contexts apply, prompts to select which one to run."
 
 ;;@FIX: Don't eval NAME arg twice.
 ;;@MAYBE: Don't require keyword arg for menu definition.
-(cl-defmacro context-transient-define (name &key doc menu context repo buffer)
+(cl-defmacro context-transient-define (name &key doc menu context repo buffer project)
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT.
 
 The resulting transient will be called `context-transient/NAME'"
-  (let ((count (length (remove nil (list context repo buffer))))
+  (let ((count (length (remove nil (list context repo buffer project))))
         (docstring (concat "Automatically generated function to check if `context-transient' conditions are currently met for " (symbol-name name)))
         (fn-name (context-transient--symbol-concat "context-transient-check/" name))
         (transient-name (context-transient--symbol-concat "context-transient/" name)))
     ;; Check if the count is not exactly one
     (when (/= count 1)
-      (user-error "Exactly one of :context, :repo, or :buffer must be provided"))
+      (user-error "Exactly one of :context, :repo, :project or :buffer must be provided"))
     (declare (indent 1))
     `(progn
        (transient-define-prefix ,transient-name () ,doc ,menu)
        (defun ,fn-name nil
         ,docstring
         (when
-            (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
+            (context-transient--check-conditions
+             :repo ,repo
+             :buffer ,buffer
+             :context ,context
+             :project ,project)
           ',transient-name))
        (unless (memq ',fn-name context-transient-hook)
         (add-hook 'context-transient-hook (function ,fn-name))))))
 
 ;; (context-transient-define context-transient-repo
 ;;   :doc "Repo specific transient"
-;;   :repo "context-transient.el"
+;;   :project "context-transient.el"
 ;;   :menu
 ;;   [["Test" ("b" "This is repo context" (lambda () (interactive) (message "Repo context!")))]])
 
-(provide 'repo-transient)
-;;; repo-transient.el ends here
+(provide 'context-transient)
+;;; context-transient.el ends here
