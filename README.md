@@ -80,4 +80,4 @@ Using use-package and elpaca:
 I recommend binding `context-transient` to something easily accessible, F6 in the example above.
 
 ## Thanks
-This library started as a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hydra.el) library. If you have Emacs 29.1 or later transient is built-in, so there are no external dependencies. But thanks to the help from [Nicholas Vollmer (@progfolio)](https://github.com/progfolio) it became a much more useful tool.
+This library started as a variation on my [repo-hydra.el](https://github.com/licht1stein/repo-hydra.el) library. But thanks to the help from [Nicholas Vollmer (@progfolio)](https://github.com/progfolio) it became a much more useful tool.
