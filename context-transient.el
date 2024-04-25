@@ -44,6 +44,13 @@ or a symbol naming a `context-transient' menu.
 Functions are run in order until the first non-nil result is returned."
   :type 'hook)
 
+;;;###autoload
+(defun context-transient-clear ()
+  "Remove all previously defined transients from `context-transient-hook'."
+  (interactive)
+  (setq context-transient-hook nil)
+  (message "All context transients removed."))
+
 (defun context-transient--check-repo (repo-name)
   "Check if current repo name is REPO-NAME."
   (when repo-name
@@ -57,6 +64,7 @@ Functions are run in order until the first non-nil result is returned."
     (equal (buffer-name) buff)))
 
 ;;@FIX: ensure returned transient is, in fact, a transient before running
+;;;###autoload
 (defun context-transient ()
   "Run `context-transient-hook' until success."
   (interactive)
@@ -64,6 +72,12 @@ Functions are run in order until the first non-nil result is returned."
       (funcall transient)
     (user-error "No transient found for current context")))
 
+(cl-defun context-transient--check-conditions (&key repo buffer context)
+  "Check if any of the REPO, BUFFER or CONTEXT conditions are true."
+  (or
+   (and repo (context-transient--check-repo repo))
+   (and buffer (context-transient--check-buffer buffer))
+   (and context (macroexp-progn (list context)))))
 
 ;;@FIX: Don't eval NAME arg twice.
 ;;@FIX: Use named functions for hook.
@@ -80,10 +94,7 @@ Functions are run in order until the first non-nil result is returned."
     (add-hook 'context-transient-hook
      (lambda ()
        (when
-           (or
-            ,(macroexp-progn (list context))
-            ,(context-transient--check-buffer buffer)
-            ,(context-transient--check-repo repo))
+           (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
          ',name)))))
 
 ;; (context-transient-define context-transient-repo
