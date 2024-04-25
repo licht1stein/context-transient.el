@@ -66,7 +66,7 @@ You need to be a bit more verbose to use it to run interactive CIDER commands wh
 ![](./img/example-2.png)
 
 ## Clearing context-transients
-If for some reason a previously defined transient misbehaves, you can clear all context transients by running `context-transient-clear`
+If for some reason a previously defined transient misbehaves, you can clear all context transients by running `M-x context-transient-clear RET`
 
 ## Installing
 Using use-package and elpaca:
