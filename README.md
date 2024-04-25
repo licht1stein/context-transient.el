@@ -104,12 +104,18 @@ Normally with transient you would need to be a bit more verbose to use it to run
 ![](./img/example-2.png)
 
 #### Better way for Clojure
-There's a much nicer way to do this with context-transient. We provide a helper function `context-transient-require-defclj`that creates a `defclj` macro and allows rewriting the above example like this:
+There's a much nicer way to do this with context-transient. We provide a helper function `context-transient-require-defclj`that creates a `defclj` macro and allows rewriting the above example like in the code below.
+
+Note, that commands created by `defclj` are interactive and can be also used from the `M-x` menu. Because of this, `defclj` also accepts and optional docstring:
+
+`(defclj my-sync-deps (sync-deps) "Sync project deps")`
+
+Here's the rewritten menu from above:
 
 ```elisp
 (context-transient-require-defclj)
 
-(defclj my-sync-deps (sync-deps))
+(defclj my-sync-deps (sync-deps) "Sync project deps")
 (defclj my-portal (user/portal))
 (defclj my-portal-clear (user/portal-clear))
 (defclj my-require-snitch (require '[snitch.core :refer [defn* defmethod* *fn *let]]))
@@ -133,7 +139,8 @@ There's a much nicer way to do this with context-transient. We provide a helper 
    ("A" "Stop main system" my-stop-sync)]])
    ```
 
-Note, that the second argument to `defclj` is unquoted Clojure code, not elisp.
+Note, that the second argument to `defclj` is unquoted Clojure code, not elisp. 
+
 ## Clearing context-transients
 If for some reason a previously defined transient misbehaves, you can clear all context transients by running `M-x context-transient-clear RET`
 
