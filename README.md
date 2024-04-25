@@ -47,7 +47,7 @@ The following example runs the transient if current buffer name is `*scratch*`:
   [["Test" ("i" "Itch *scratch*" (lambda () (interactive) (message "Itched")))]])
 ```
 
-### Project context (`:context`)
+### Project context (`:project`)
 This will check if the built-in project.el project name is equal to this. Same as `:buffer` or `:repo` — just pass a project name as a string.
 
 ### Any expression context (`:context`)
