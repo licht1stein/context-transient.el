@@ -117,7 +117,7 @@ The resulting transient will be called `context-transient/NAME'"
         (transient-name (context-transient--symbol-concat "context-transient/" name)))
     ;; Check if the count is not exactly one
     (when (/= count 1)
-      (user-error "Exactly one of :context, :repo, :project or :buffer must be provided"))
+      (user-error "Exactly one of :context, :repo, :buffer, :project or :mode must be provided"))
     (declare (indent 1))
     `(progn
        (transient-define-prefix ,transient-name () ,doc ,menu)
