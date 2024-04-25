@@ -22,7 +22,7 @@ Context transients are defined using `context-transient-define`. You can specify
 
 Obviously, it's quite possible to define several transients that would apply to the current context. In this case user will be prompted to choose which one to run.
 
-### Git repo context
+### Git repo context (`:repo`)
 This example defines a transient menu for git repos. Note the usage of `:repo` function — this is a helper function that returns `t` if the repo name is equal to it's argument. But context accepts any expression that evaluates to `t` or `nil`.
 ```elisp
 (context-transient-define context-transient-repo
@@ -36,7 +36,7 @@ This example defines a transient menu for git repos. Note the usage of `:repo` f
   ```
  ![](./img/example-1.png)
 
-### Buffer name context
+### Buffer name context (`:buffer`)
 The following example runs the transient if current buffer name is `*scratch*`:
 ```elisp
 (context-transient-define itch
@@ -46,7 +46,7 @@ The following example runs the transient if current buffer name is `*scratch*`:
   [["Test" ("i" "Itch *scratch*" (lambda () (interactive) (message "Itched")))]])
 ```
 
-### Any expression context
+### Any expression context (`:context`)
 You can run any lisp expression in `:context`. For example, transient only works on Thursdays:
 
 ```elisp
