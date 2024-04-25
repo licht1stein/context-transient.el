@@ -106,7 +106,7 @@ Normally with transient you would need to be a bit more verbose to use it to run
 #### Better way for Clojure
 There's a much nicer way to do this with context-transient. We provide a helper function `context-transient-require-defclj`that creates a `defclj` macro and allows rewriting the above example like in the code below.
 
-Note, that commands created by `defclj` are interactive and can also **be used from the `M-x` menu** or bound to hotkeys. Because of this, `defclj` also accepts and optional docstring:
+Note, that commands created by `defclj` are interactive and can also **be used from the `M-x` menu** or bound to hotkeys. Because of this, `defclj` also accepts an optional docstring:
 
 `(defclj my-sync-deps (sync-deps) "Sync project deps")`
 
