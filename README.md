@@ -3,6 +3,7 @@ Easily create context-specific transient menus for Emacs. Context can be anythin
 
 ## Example
 This is a menu  I get when pressing F6 while working on one of my projects:
+
 ![](./img/example-2.png)
 
 ## Usage
