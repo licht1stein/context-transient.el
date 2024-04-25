@@ -69,7 +69,7 @@ Functions are run in order until the first non-nil result is returned."
 ;;@FIX: Use named functions for hook.
 ;;@MAYBE: Namespace defined menus.
 ;;@MAYBE: Don't require keyword arg for menu definition.
-(cl-defmacro context-transient-define (name &key doc context menu repo buffer)
+(cl-defmacro context-transient-define (name &key doc menu context repo buffer)
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT."
   (declare (indent 1))
   (let ((count (length (remove nil (list context repo buffer)))))
