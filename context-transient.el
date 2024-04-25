@@ -79,14 +79,16 @@ Functions are run in order until the first non-nil result is returned."
   `(progn (transient-define-prefix ,name () ,doc ,menu)
     (add-hook 'context-transient-hook
      (lambda ()
-       (cond
-        (,(macroexp-progn (list context)) ',name)
-        (,(context-transient--check-buffer buffer) ',name)
-        (,(context-transient--check-repo repo) ',name))))))
+       (when
+           (or
+            ,(macroexp-progn (list context))
+            ,(context-transient--check-buffer buffer)
+            ,(context-transient--check-repo repo))
+         ',name)))))
 
 ;; (context-transient-define context-transient-repo
 ;;   :doc "Repo specific transient"
-;;   :repo "*scratch*"
+;;   :repo "context-transient.el"
 ;;   :menu
 ;;   [["Test" ("b" "This is repo context" (lambda () (interactive) (message "Repo context!")))]])
 
