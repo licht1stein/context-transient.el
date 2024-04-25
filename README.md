@@ -116,21 +116,22 @@ There's a much nicer way to do this with context-transient. We provide a helper 
 (defclj my-restart-sync (user/restart-sync))
 (defclj my-stop-sync (user/stop-sync))
 
-(context-transient-define my-clj-transient
-                          :doc "Trader transient"
-                          :repo "my-clj-repo"
-                          :menu
-                          [["REPL"
-                            ("c" "Connect REPL" (lambda () (interactive) (cider-connect-clj '(:host "localhost" :port 63000))) :transient nil)
-                            ("d" "Sync deps" my-sync-deps)]
-                           ["Debug"
-                            ("p" "Start portal" my-portal)
-                            ("P" "Clear portal" my-portal-clear)
-                            ("S" "Require snitch" my-require-snitch)]
-                           ["Systems"
-                            ("a" "(Re)start main system" my-restart-sync)
-                            ("A" "Stop main system" my-stop-sync)]])
-```
+(context-transient-define
+ my-clj-transient
+ :doc "Trader transient"
+ :repo "my-clj-repo"
+ :menu
+ [["REPL"
+   ("c" "Connect REPL" (lambda () (interactive) (cider-connect-clj '(:host "localhost" :port 63000))) :transient nil)
+   ("d" "Sync deps" my-sync-deps)]
+  ["Debug"
+   ("p" "Start portal" my-portal)
+   ("P" "Clear portal" my-portal-clear)
+   ("S" "Require snitch" my-require-snitch)]
+  ["Systems"
+   ("a" "(Re)start main system" my-restart-sync)
+   ("A" "Stop main system" my-stop-sync)]])
+   ```
 
 Note, that the second argument to `defclj` is unquoted Clojure code, not elisp.
 ## Clearing context-transients
