@@ -79,23 +79,29 @@ Functions are run in order until the first non-nil result is returned."
    (and buffer (context-transient--check-buffer buffer))
    (and context (macroexp-progn (list context)))))
 
+(defun context-transient--generate-function-name (name)
+  "Generate standardized menu function names using NAME and prefix."
+  (intern (concat "context-transient/" (symbol-name name))))
+
 ;;@FIX: Don't eval NAME arg twice.
-;;@FIX: Use named functions for hook.
 ;;@MAYBE: Namespace defined menus.
 ;;@MAYBE: Don't require keyword arg for menu definition.
 (cl-defmacro context-transient-define (name &key doc menu context repo buffer)
   "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT."
   (declare (indent 1))
-  (let ((count (length (remove nil (list context repo buffer)))))
+  (let ((count (length (remove nil (list context repo buffer))))
+        (fn-name (context-transient--generate-function-name name)))
     ;; Check if the count is not exactly one
     (when (/= count 1)
-      (user-error "Exactly one of :context, :repo, or :buffer must be provided")))
-  `(progn (transient-define-prefix ,name () ,doc ,menu)
-    (add-hook 'context-transient-hook
-     (lambda ()
-       (when
-           (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
-         ',name)))))
+      (user-error "Exactly one of :context, :repo, or :buffer must be provided"))
+    `(progn
+       (transient-define-prefix ,name () ,doc ,menu)
+       (defun ,fn-name ()
+        ,doc
+        (when
+            (context-transient--check-conditions :repo ,repo :buffer ,buffer :context ,context)
+          ',name))
+       (add-hook 'context-transient-hook (function ,fn-name)))))
 
 ;; (context-transient-define context-transient-repo
 ;;   :doc "Repo specific transient"
