@@ -118,7 +118,7 @@ There's a much nicer way to do this with context-transient. We provide a helper 
 
 (context-transient-define
  my-clj-transient
- :doc "Trader transient"
+ :doc "Transient for my-clj repo"
  :repo "my-clj-repo"
  :menu
  [["REPL"
