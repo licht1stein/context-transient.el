@@ -134,11 +134,20 @@ The resulting transient will be called `context-transient/NAME'"
        (unless (memq ',fn-name context-transient-hook)
         (add-hook 'context-transient-hook (function ,fn-name))))))
 
-;; (context-transient-define context-transient-repo
-;;   :doc "Repo specific transient"
-;;   :project "context-transient.el"
-;;   :menu
-;;   [["Test" ("b" "This is repo context" (lambda () (interactive) (message "Repo context!")))]])
+
+;;;###autoload
+(defun context-transient-require-defclj ()
+  "Creates a convenience macro `defclj' to use for defining `'cider-interactive-eval' commands.'"
+  (defmacro defclj (name command)
+    "Define `cider-interactive-eval' commands.
+
+NAME - is the name of the resulting function
+COMMAND - is unescaped, unquoted clojure code"
+    `(defun ,name ()
+      (interactive)
+      (cider-interactive-eval
+       (format "%s" ',command)))))
+
 
 (provide 'context-transient)
 ;;; context-transient.el ends here

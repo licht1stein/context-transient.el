@@ -80,7 +80,7 @@ You can run any lisp expression in `:context`. For example, transient only works
  ``` 
 
 ### Clojure Specific Example
-You need to be a bit more verbose to use it to run interactive CIDER commands while working on a Clojure project:
+Normally with transient you would need to be a bit more verbose to use it to run interactive CIDER commands while working on a Clojure project:
 ```elisp
 (context-transient-define my-clj-transient
   :doc "Transient for my-clj-repo"
@@ -99,6 +99,36 @@ You need to be a bit more verbose to use it to run interactive CIDER commands wh
  ```
 ![](./img/example-2.png)
 
+#### Better way for Clojure
+There's a much nicer way to do this with context-transient. We provide a helper function `context-transient-require-defclj`that creates a `defclj` macro and allows rewriting the above example like this:
+
+```elisp
+(context-transient-require-defclj)
+
+(defclj my-sync-deps (sync-deps))
+(defclj my-portal (user/portal))
+(defclj my-portal-clear (user/portal-clear))
+(defclj my-require-snitch (require '[snitch.core :refer [defn* defmethod* *fn *let]]))
+(defclj my-restart-sync (user/restart-sync))
+(defclj my-stop-sync (user/stop-sync))
+
+(context-transient-define my-clj-transient
+                          :doc "Trader transient"
+                          :repo "my-clj-repo"
+                          :menu
+                          [["REPL"
+                            ("c" "Connect REPL" (lambda () (interactive) (cider-connect-clj '(:host "localhost" :port 63000))) :transient nil)
+                            ("d" "Sync deps" my-sync-deps)]
+                           ["Debug"
+                            ("p" "Start portal" my-portal)
+                            ("P" "Clear portal" my-portal-clear)
+                            ("S" "Require snitch" my-require-snitch)]
+                           ["Systems"
+                            ("a" "(Re)start main system" my-restart-sync)
+                            ("A" "Stop main system" my-stop-sync)]])
+```
+
+Note, that the second argument to `defclj` is unquoted Clojure code, not elisp.
 ## Clearing context-transients
 If for some reason a previously defined transient misbehaves, you can clear all context transients by running `M-x context-transient-clear RET`
 
