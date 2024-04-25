@@ -6,6 +6,8 @@ This is a menu  I get when pressing F6 while working on one of my projects:
 
 ![](./img/example-2.png)
 
+What the commands do is not important, what's important is how easy it was to make a project-specific transient menu with useful commands.
+
 ## Usage
 Once you have defined your context-specific transients, call them with `M-x context-transient RET`.
 
