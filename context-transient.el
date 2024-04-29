@@ -139,20 +139,21 @@ The resulting transient will be called `context-transient/NAME'"
 
 
 ;;;###autoload
-(defun context-transient-require-defclj ()
+(defun context-transient-require-defclj (&optional macro-name)
   "Creates a convenience macro `defclj'.
 
 Use it to define `'cider-interactive-eval' commands.'"
-  (defmacro defclj (name command &optional docstring)
-    "Define `cider-interactive-eval' commands.
+  (let* ((mname (or macro-name 'defclj)))
+    (defmacro ,mname (name command &optional docstring)
+      "Define `cider-interactive-eval' commands.
 
 NAME - is the name of the resulting function
 COMMAND - is unescaped, unquoted clojure code"
-    `(defun ,name ()
-      ,docstring
-      (interactive)
-      (cider-interactive-eval
-       (format "%s" ',command)))))
+      `(defun ,name ()
+        ,docstring
+        (interactive)
+        (cider-interactive-eval
+         (format "%s" ',command))))))
 
 
 (provide 'context-transient)
