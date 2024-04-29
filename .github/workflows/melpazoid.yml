@@ -20,7 +20,7 @@ jobs:
         curl -LsSf https://astral.sh/uv/install.sh | sh
         sudo apt-get install emacs && emacs --version
         git clone https://github.com/riscy/melpazoid.git ~/melpazoid
-        /root/.cargo/bin/uv pip install --system --no-cache-dir ~/melpazoid
+        sudo /root/.cargo/bin/uv pip install --system --no-cache-dir ~/melpazoid
     - name: Run
       env:
         LOCAL_REPO: ${{ github.workspace }}
