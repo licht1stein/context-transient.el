@@ -4,7 +4,7 @@
 ;;
 ;; Author: Mykhaylo Bilyanskyy <mb@m1k.pw>
 ;; Maintainer: Mykhaylo Bilyanskyy <mb@m1k.pw>
-;; Version: 0.1
+;; Version: 1.0.0
 ;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 23 Apr 2024
@@ -34,6 +34,7 @@
 ;; project, git repo, buffer or any other condition.
 ;;; Code:
 (require 'transient)
+(require 'project)
 
 (defgroup context-transient nil "Contextual transient menus."
   :group 'convenience)
@@ -91,7 +92,8 @@ If more than one contexts apply, prompts to select which one to run."
      (t (funcall (intern (completing-read "More than one context transients found:" transients)))))))
 
 (cl-defun context-transient--check-conditions (&key repo buffer context project mode)
-  "Check if any of the REPO, BUFFER or CONTEXT conditions are true."
+  "Check if any of the REPO, BUFFER, CONTEXT, PROJECT or MODE conditions
+are true."
   (or
    (and repo (context-transient--check-repo repo))
    (and buffer (context-transient--check-buffer buffer))
@@ -108,9 +110,10 @@ If more than one contexts apply, prompts to select which one to run."
 ;;@FIX: Don't eval NAME arg twice.
 ;;@MAYBE: Don't require keyword arg for menu definition.
 (cl-defmacro context-transient-define (name &key doc menu context repo buffer project mode)
-  "Define a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT.
+  "Defines a transient MENU with NAME with DOC and DEFINITION to run in CONTEXT.
 
 The resulting transient will be called `context-transient/NAME'"
+  (declare (indent 1))
   (let ((count (length (remove nil (list context repo buffer project mode))))
         (docstring (concat "Automatically generated function to check if `context-transient' conditions are currently met for " (symbol-name name)))
         (fn-name (context-transient--symbol-concat "context-transient-check/" name))
@@ -118,7 +121,6 @@ The resulting transient will be called `context-transient/NAME'"
     ;; Check if the count is not exactly one
     (when (/= count 1)
       (user-error "Exactly one of :context, :repo, :buffer, :project or :mode must be provided"))
-    (declare (indent 1))
     `(progn
        (transient-define-prefix ,transient-name () ,doc ,menu)
        (defun ,fn-name nil
@@ -137,7 +139,9 @@ The resulting transient will be called `context-transient/NAME'"
 
 ;;;###autoload
 (defun context-transient-require-defclj ()
-  "Creates a convenience macro `defclj' to use for defining `'cider-interactive-eval' commands.'"
+  "Creates a convenience macro `defclj'.
+
+Use it to define `'cider-interactive-eval' commands.'"
   (defmacro defclj (name command &optional docstring)
     "Define `cider-interactive-eval' commands.
 
