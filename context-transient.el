@@ -92,8 +92,9 @@ If more than one contexts apply, prompts to select which one to run."
      (t (funcall (intern (completing-read "More than one context transients found:" transients)))))))
 
 (cl-defun context-transient--check-conditions (&key repo buffer context project mode)
-  "Check if any of the REPO, BUFFER, CONTEXT, PROJECT or MODE conditions
-are true."
+  "Check if any of the conditions are true.
+
+One of REPO, BUFFER, CONTEXT, PROJECT or MODE must be specified and will be checked."
   (or
    (and repo (context-transient--check-repo repo))
    (and buffer (context-transient--check-buffer buffer))
