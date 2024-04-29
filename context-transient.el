@@ -146,17 +146,19 @@ You can optionally provide MACRO-NAME to use instead of defclj.
 
 Use it to define `'cider-interactive-eval' commands.'"
   (let* ((mname (or macro-name 'defclj)))
-    (defmacro ,mname (name command &optional docstring)
-      "Define `cider-interactive-eval' commands.
+    (eval 
+     `(defmacro ,mname (name command &optional docstring)
+       "Define `cider-interactive-eval' commands.
 
 NAME - is the name of the resulting function
-COMMAND - is unescaped, unquoted clojure code"
-      `(defun ,name ()
-        ,docstring
-        (interactive)
-        (cider-interactive-eval
-         (format "%s" ',command))))))
+COMMAND - is unescaped, unquoted clojure code
 
+This macro was defined by calling `context-transient-require-defclj'."
+       `(defun ,name ()
+         ,docstring
+         (interactive)
+         (cider-interactive-eval
+          (format "%s" ',command)))))))
 
 (provide 'context-transient)
 ;;; context-transient.el ends here
