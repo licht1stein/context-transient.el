@@ -94,7 +94,8 @@ If more than one contexts apply, prompts to select which one to run."
 (cl-defun context-transient--check-conditions (&key repo buffer context project mode)
   "Check if any of the conditions are true.
 
-One of REPO, BUFFER, CONTEXT, PROJECT or MODE must be specified and will be checked."
+One of REPO, BUFFER, CONTEXT, PROJECT or MODE
+must be specified and will be checked."
   (or
    (and repo (context-transient--check-repo repo))
    (and buffer (context-transient--check-buffer buffer))
@@ -146,7 +147,7 @@ You can optionally provide MACRO-NAME to use instead of defclj.
 
 Use it to define `'cider-interactive-eval' commands.'"
   (let* ((mname (or macro-name 'defclj)))
-    (eval 
+    (eval
      `(defmacro ,mname (name command &optional docstring)
        "Define `cider-interactive-eval' commands.
 
