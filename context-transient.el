@@ -142,6 +142,8 @@ The resulting transient will be called `context-transient/NAME'"
 (defun context-transient-require-defclj (&optional macro-name)
   "Creates a convenience macro `defclj'.
 
+You can optionally provide MACRO-NAME to use instead of defclj.
+
 Use it to define `'cider-interactive-eval' commands.'"
   (let* ((mname (or macro-name 'defclj)))
     (defmacro ,mname (name command &optional docstring)
