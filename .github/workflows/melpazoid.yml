@@ -26,7 +26,7 @@ jobs:
       env:
         LOCAL_REPO: ${{ github.workspace }}
         # RECIPE is your recipe as written for MELPA:
-        RECIPE: (context-transient :repo "licht1stein/context-transient" :fetcher github)
+        RECIPE: (context-transient :repo "licht1stein/context-transient.el" :fetcher github)
         # set this to false (or remove it) if the package isn't on MELPA:
         EXIST_OK: false
       run: echo $GITHUB_REF && make -C ~/melpazoid
