@@ -37,7 +37,7 @@ This example defines a transient menu for git repos. Note the usage of `:repo` f
 ```elisp
 (context-transient-define context-transient-repo
   :doc "Repo specific transient"
-  :repo "context-transient.el
+  :repo "context-transient.el"
   :menu
   ["Section"
   ["Subsection"
