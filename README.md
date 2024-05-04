@@ -60,15 +60,18 @@ The following example runs the transient if current buffer name is `*scratch*`:
 This will check if the built-in project.el project name is equal to this. Same as `:buffer` or `:repo` — just pass a project name as a string.
 
 ### Major mode context (`:mode`)
-Checks if the current major-mode is this. Note, you need to provided the major mode as a quoted symbol, and not as a string:
+Checks if the current major-mode is this. Note, you need to provided the major mode as a quoted symbol, and not as a string. Here's an example of a menu for editing subtitles:
+
 ```elisp
-(context-transient-define
- dired-transient
- :doc "My Dired Transient"
- :mode 'dired-mode
- :menu
- [["Dired"
-   ("d" "Dired mode" (lambda () (interactive) (message "This is dired!")))]])
+(context-transient-define subed-transient
+    :doc "Transient for working with subtitles"
+    :mode 'subed-srt-mode
+    :menu
+    ["MPV"
+     ("o" "Open video file" subed-mpv-play-from-file)
+     ("O" "Open video url" subed-mpv-play-from-url)
+     ("s" "Toggle sync subs -> player" subed-toggle-sync-player-to-point)
+     ("p" "Toggle sync player -> subs" subed-toggle-sync-point-to-player)])
 ```
 
 ### Any expression context (`:context`)
