@@ -1,6 +1,9 @@
 # context-transient.el
 Easily create context-specific transient menus for Emacs. Context can be anything — buffer name, current git repo, current project etc. See examples.
 
+[![MELPA](https://melpa.org/packages/context-transient-badge.svg)](https://melpa.org/#/context-transient)
+
+
 ## Example
 This is a menu  I get when pressing F6 while working on one of my projects:
 
@@ -12,12 +15,12 @@ What the commands do is not important, what's important is how easy it was to ma
 Once you have defined your context-specific transients, call them with `M-x context-transient RET`.
 
 ## Installing
-Using use-package and elpaca:
+You can install it from MELPA using `M-x package-install RET context-transient RET`, or using use-package:
+
 ```elisp
 (use-package context-transient
-  :elpaca (:type git :host github :repo "licht1stein/context-transient.el")
-  :defer nil
-  :bind ("<f6>" . context-transient))
+ :defer nil
+ :bind ("<f6>" . context-transient))
 ```
 I recommend binding `context-transient` to something easily accessible, F6 in the example above.
 
@@ -84,7 +87,7 @@ You can run any lisp expression in `:context`. For example, transient only works
   :menu
   [["Thursday!"
     ("t" "Once a week" (lambda () (interactive) (message "IT IS THURSDAY!")))]])
- ``` 
+ ```
 
 ### Clojure Specific Example
 Normally with transient you would need to be a bit more verbose to use it to run interactive CIDER commands while working on a Clojure project:
@@ -92,7 +95,7 @@ Normally with transient you would need to be a bit more verbose to use it to run
 (context-transient-define my-clj-transient
   :doc "Transient for my-clj-repo"
   :repo "my-clj-repo"
-  :menu 
+  :menu
   [["REPL"
    ("c" "Connect REPL" (lambda () (interactive) (cider-connect-clj '(:host "localhost" :port 63000))) :transient nil)
    ("d" "Sync deps" (lambda () (interactive) (cider-interactive-eval "(sync-deps)")))]
@@ -142,7 +145,7 @@ Here's the rewritten menu from above:
    ("A" "Stop main system" my-stop-sync)]])
    ```
 
-Note, that the second argument to `defclj` is unquoted Clojure code, not elisp. 
+Note, that the second argument to `defclj` is unquoted Clojure code, not elisp.
 
 ## Clearing context-transients
 If for some reason a previously defined transient misbehaves, you can clear all context transients by running `M-x context-transient-clear RET`
