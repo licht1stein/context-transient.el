@@ -1,8 +1,8 @@
+[![MELPA](https://melpa.org/packages/context-transient-badge.svg)](https://melpa.org/#/context-transient)
+[![MELPA Stable](https://stable.melpa.org/packages/context-transient-badge.svg)](https://stable.melpa.org/#/context-transient)
+
 # context-transient.el
 Easily create context-specific transient menus for Emacs. Context can be anything — buffer name, current git repo, current project etc. See examples.
-
-[![MELPA](https://melpa.org/packages/context-transient-badge.svg)](https://melpa.org/#/context-transient)
-
 
 ## Example
 This is a menu  I get when pressing F6 while working on one of my projects:
