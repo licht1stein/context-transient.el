@@ -4,7 +4,7 @@
 ;;
 ;; Author: Mykhaylo Bilyanskyy <mb@m1k.pw>
 ;; Maintainer: Mykhaylo Bilyanskyy <mb@m1k.pw>
-;; Version: 1.0.0
+;; Version: 1.0.1
 ;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 23 Apr 2024
@@ -126,17 +126,17 @@ The resulting transient will be called `context-transient/NAME'"
     `(progn
        (transient-define-prefix ,transient-name () ,doc ,menu)
        (defun ,fn-name nil
-        ,docstring
-        (when
-            (context-transient--check-conditions
-             :repo ,repo
-             :buffer ,buffer
-             :context ,context
-             :project ,project
-             :mode ,mode)
-          ',transient-name))
+         ,docstring
+         (when
+             (context-transient--check-conditions
+              :repo ,repo
+              :buffer ,buffer
+              :context ,context
+              :project ,project
+              :mode ,mode)
+           ',transient-name))
        (unless (memq ',fn-name context-transient-hook)
-        (add-hook 'context-transient-hook (function ,fn-name))))))
+         (add-hook 'context-transient-hook (function ,fn-name))))))
 
 
 ;;;###autoload
@@ -149,17 +149,17 @@ Use it to define `'cider-interactive-eval' commands.'"
   (let* ((mname (or macro-name 'defclj)))
     (eval
      `(defmacro ,mname (name command &optional docstring)
-       "Define `cider-interactive-eval' commands.
+        "Define `cider-interactive-eval' commands.
 
 NAME - is the name of the resulting function
 COMMAND - is unescaped, unquoted clojure code
 
 This macro was defined by calling `context-transient-require-defclj'."
-       `(defun ,name ()
-         ,docstring
-         (interactive)
-         (cider-interactive-eval
-          (format "%s" ',command)))))))
+        `(defun ,name ()
+           ,(or docstring (format "Clojure transient cmd: %s" name))
+           (interactive)
+           (cider-interactive-eval
+            (format "%s" ',command)))))))
 
 (provide 'context-transient)
 ;;; context-transient.el ends here
